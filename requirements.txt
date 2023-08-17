@@ -1,0 +1,4 @@
+Django
+pyTelegramBotAPI
+psycopg2
+aiogram
