@@ -13,7 +13,9 @@ async def send_instructions(message: types.Message):
 	await message.answer("In order to give meter readings, enter the command: /indication", reply_markup=keyboard)
 
 @dp.message_handler()
-async def send(message: types.Message):
+async def send(message: types.Message, state: FSMContext):
+	await state.finish()
+	await message.answer(message.contact.phone_number)
 	print(message)
 
 executor.start_polling(dp)
