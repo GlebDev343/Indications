@@ -9,16 +9,22 @@ class MeterModel(models.Model):
     model_name = models.CharField()
     scale_size = models.IntegerField()
 
+    class Meta:
+        unique_together = ["manufacturer","model_name"]
+
 class MeteringDevice(models.Model):
     number = models.IntegerField()
     model_metering_device = models.ForeignKey(MeterModel, on_delete=models.CASCADE)
     date_of_issue = models.DateField()
 
+    class Meta:
+        unique_together = ["number","model_metering_device","date_of_issue"]
+
 class PersonalAccount(models.Model):
     address = models.CharField()
     account_number = models.IntegerField(unique=True)
     first_name = models.CharField()
-    sur_name = models.CharField()
+    patronymic = models.CharField()
     last_name = models.CharField()
     email = models.CharField(null=True)
     phone_number = models.IntegerField(null=True)
@@ -29,7 +35,13 @@ class InstalledMeteringDevice(models.Model):
     installation_date = models.DateField()
     remove_date =  models.DateField(null=True)
 
+    class Meta:
+        unique_together = ["personal_account","metering_device","installation_date"]
+
 class Indication(models.Model):
     current_value = models.IntegerField()
     time_of_taking = models.DateTimeField()
     metering_device = models.ForeignKey(InstalledMeteringDevice, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ["current_value", "time_of_taking", "metering_device"]
