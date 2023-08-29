@@ -1,5 +1,11 @@
 from django.db import models
 from datetime import datetime
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+def min_phone_value(value):
+    if value < 10000000:
+        raise ValidationError(_("%(value)s is less than required."))
 
 class Manufacturer(models.Model):
     name = models.CharField(unique=True)
@@ -28,7 +34,7 @@ class PersonalAccount(models.Model):
     patronymic = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.CharField(null=True, blank=True)
-    phone_number = models.IntegerField(null=True, max_length=10)
+    phone_number = models.IntegerField(null=True, validators=[min_phone_value])
     verification_code = models.TextField()
     code_validity = models.DateTimeField(default=datetime.now())
 
@@ -36,6 +42,7 @@ class InstalledMeteringDevice(models.Model):
     personal_account = models.ForeignKey(PersonalAccount, on_delete=models.CASCADE)
     metering_device = models.ForeignKey(MeteringDevice, on_delete=models.CASCADE)
     installation_date = models.DateField()
+    range_of_installation = models.DateField()
     remove_date =  models.DateField(null=True, blank=True)
 
     class Meta:
@@ -47,4 +54,4 @@ class Indication(models.Model):
     metering_device = models.ForeignKey(InstalledMeteringDevice, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ["current_value", "time_of_taking", "metering_device"]
+        unique_together = ["metering_device", "current_value", "time_of_taking"]
