@@ -7,6 +7,10 @@ def min_phone_value(value):
     if value < 10000000:
         raise ValidationError(_("%(value)s is less than required."))
 
+def max_current_value(value):
+    if value > 10000000:
+        raise ValidationError(_("%(value)s is greater than required."))
+
 class Manufacturer(models.Model):
     name = models.CharField(unique=True)
     contact_details = models.CharField()
@@ -20,7 +24,7 @@ class MeterModel(models.Model):
         unique_together = ["manufacturer","model_name"]
 
 class MeteringDevice(models.Model):
-    number = models.IntegerField(max_length=10)
+    number = models.IntegerField()
     model_metering_device = models.ForeignKey(MeterModel, on_delete=models.CASCADE)
     date_of_issue = models.DateField()
 
@@ -36,20 +40,19 @@ class PersonalAccount(models.Model):
     email = models.CharField(null=True, blank=True)
     phone_number = models.IntegerField(null=True, validators=[min_phone_value])
     verification_code = models.TextField()
-    code_validity = models.DateTimeField(default=datetime.now())
+    code_validity = models.DateTimeField(null=True)
 
 class InstalledMeteringDevice(models.Model):
     personal_account = models.ForeignKey(PersonalAccount, on_delete=models.CASCADE)
     metering_device = models.ForeignKey(MeteringDevice, on_delete=models.CASCADE)
     installation_date = models.DateField()
-    range_of_installation = models.DateField()
     remove_date =  models.DateField(null=True, blank=True)
 
     class Meta:
         unique_together = ["personal_account","metering_device","installation_date"]
 
 class Indication(models.Model):
-    current_value = models.IntegerField(max_length=8)
+    current_value = models.IntegerField(validators=[max_current_value])
     time_of_taking = models.DateTimeField()
     metering_device = models.ForeignKey(InstalledMeteringDevice, on_delete=models.CASCADE)
 
