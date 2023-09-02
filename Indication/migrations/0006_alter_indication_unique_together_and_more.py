@@ -11,8 +11,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL("ALTER TABLE Indication_installedmeteringdevice ADD COLUMN range_of_installation tsrange;"),
-        migrations.RunSQL("ALTER TABLE Indication_installedmeteringdevice ADD EXCLUDE USING GIST (range_of_installation WITH &&);"),
+        migrations.RunSQL("ALTER TABLE \"Indication_installedmeteringdevice\"\
+                           ADD COLUMN range_of_installation tsrange\
+                           GENERATED ALWAYS AS tsrange(installation_date, remove_date);"),
+        migrations.RunSQL("ALTER TABLE \"Indication_installedmeteringdevice\"\
+                           ADD EXCLUDE USING GIST (range_of_installation WITH &&);"),
         migrations.AlterUniqueTogether(
             name='indication',
             unique_together=set(),
