@@ -11,11 +11,13 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunSQL("CREATE EXTENSION btree_gist;"),
         migrations.RunSQL("ALTER TABLE \"Indication_installedmeteringdevice\"\
                            ADD COLUMN range_of_installation tsrange\
-                           GENERATED ALWAYS AS tsrange(installation_date, remove_date);"),
+                           GENERATED ALWAYS AS (\
+                           tsrange(\"installation_date\", \"remove_date\")) STORED"),
         migrations.RunSQL("ALTER TABLE \"Indication_installedmeteringdevice\"\
-                           ADD EXCLUDE USING GIST (range_of_installation WITH &&);"),
+                           ADD EXCLUDE USING GIST (metering_device_id WITH =, range_of_installation WITH &&);"),
         migrations.AlterUniqueTogether(
             name='indication',
             unique_together=set(),
