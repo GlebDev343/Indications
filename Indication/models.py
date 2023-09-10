@@ -39,7 +39,7 @@ class PersonalAccount(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.CharField(null=True, blank=True)
     phone_number = models.IntegerField(null=True, validators=[min_phone_value])
-    verification_code = models.TextField()
+    verification_code = models.CharField()
     code_validity = models.DateTimeField(null=True)
 
 class InstalledMeteringDevice(models.Model):
