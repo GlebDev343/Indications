@@ -1,4 +1,3 @@
 Django
-pyTelegramBotAPI
+django-telegram-bot
 psycopg2
-pyTelegramBotAPI
