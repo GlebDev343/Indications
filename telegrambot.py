@@ -2,7 +2,8 @@ import telebot
 from telebot import types
 import Indication
 from Indication.models import Indication, MeteringDevice
-from Indication.views import IndicationController
+import Services
+from Services.indication_service import save_value
 
 token = "6472590444:AAH911J01CgccTCDJ0Wbhb56desyqaqVH2Y"
 bot = telebot.TeleBot(token)
@@ -20,17 +21,14 @@ def indication(message):
     bot.register_next_step_handler(msg, save_current_value)
 
 def save_current_value(message):
-    IndicationController.current_value = int(message.text)
-    msg = "Enter number of  your metering device"
-    bot.register_next_step_handler(msg, save_time_of_taking)
+    global current_value
+    current_value = int(message.text)
+    msg = "Enter your account number:"
+    bot.register_next_step_handler(msg, save_account_number)
 
-def save_time_of_taking(message):
-    IndicationController.time_of_taking = message.text
-    msg = "You have sent your indication successfully"
-    bot.register_next_step_handler(msg, save_metering_device)
-
-def save_metering_device(message):
-    IndicationController.metering_device = int(message.text)
-    IndicationController.post()
+def save_account_number(message):
+    account_number = int(message.text)
+    save_value(cv=current_value, an=account_number)
+    bot.send_message(message.chat.id, "Hurray!")
 
 bot.polling(non_stop=True)

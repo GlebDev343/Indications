@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'Services.apps.ServicesConfig',
     'Indication.apps.IndicationConfig',
     "rest_framework",
     "telegrambot",
