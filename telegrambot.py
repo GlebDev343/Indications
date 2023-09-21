@@ -1,3 +1,10 @@
+import os
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Indications.settings')
+
+import django
+django.setup()
+
 import telebot
 from telebot import types
 import Indication
@@ -12,23 +19,25 @@ markup2 = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_
 indication_button = types.KeyboardButton('Indication')
 markup2.add(indication_button)
 
+@bot.message_handler(commands=['start'])
+def indication(message):
+    bot.send_message(message.chat.id, "Hello", reply_markup=markup2)
+    bot.register_next_step_handler(message, indication)
 
 @bot.message_handler(commands=['indication'])
 def indication(message):
-    bot.send_message(message.chat.id, "Enter current value:", reply_markup=markup2)
-    msg = "Enter time of taking:\
-           Example(2023-05-25 15:40)"
-    bot.register_next_step_handler(msg, save_current_value)
+    bot.send_message(message.chat.id, "Enter current value:")
+    bot.register_next_step_handler(message, save_current_value)
 
 def save_current_value(message):
     global current_value
     current_value = int(message.text)
-    msg = "Enter your account number:"
-    bot.register_next_step_handler(msg, save_account_number)
+    bot.send_message(message.chat.id, "Enter your personal account number")
+    bot.register_next_step_handler(message, save_account_number)
 
 def save_account_number(message):
     account_number = int(message.text)
     save_value(cv=current_value, an=account_number)
     bot.send_message(message.chat.id, "Hurray!")
 
-bot.polling(non_stop=True)
+bot.infinity_polling()
