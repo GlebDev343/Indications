@@ -2,3 +2,5 @@ Django
 pyTelegramBotAPI
 psycopg2
 djangorestframework
+django-extensions
+ipython

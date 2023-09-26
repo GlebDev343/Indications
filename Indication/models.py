@@ -1,5 +1,6 @@
+import datetime
+from datetime import timedelta
 from django.db import models
-from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -40,7 +41,7 @@ class PersonalAccount(models.Model):
     email = models.CharField(null=True, blank=True)
     phone_number = models.IntegerField(null=True, validators=[min_phone_value])
     verification_code = models.CharField()
-    code_validity = models.DateTimeField(null=True)
+    code_validity = models.DateTimeField(default=datetime.datetime.now() + datetime.timedelta(days=-9999))
 
 class InstalledMeteringDevice(models.Model):
     personal_account = models.ForeignKey(PersonalAccount, on_delete=models.CASCADE)
