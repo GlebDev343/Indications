@@ -6,7 +6,6 @@ import django
 django.setup()
 
 import datetime
-from Indications.celery import app
 import telebot
 from telebot import types
 from django.core.mail import send_mail
@@ -30,7 +29,6 @@ def indication(message):
 def indication(message):
     bot.send_message(message.chat.id, "Enter your personal account number:")
 
-@app.task
 @bot.message_handler(regexp="^\d+$")
 def check_pesonal_account(message):
     try:
@@ -44,7 +42,6 @@ def check_pesonal_account(message):
     except PersonalAccount.DoesNotExist:
         bot.send_message(message.chat.id, "You entered an incorrect account number, please try again:")
 
-@app.task
 @bot.message_handler(regexp="^\d+ \w+$")
 def check_and_save_record(message):
     try:

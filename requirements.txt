@@ -5,3 +5,5 @@ djangorestframework
 django-extensions
 ipython
 celery
+celery[redis]
+celery[yaml]

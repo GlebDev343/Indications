@@ -2,13 +2,16 @@ import datetime
 import random
 import string
 import Indication
+from Indications.celery import app
 from Indication.views import IndicationController
 from Indication.models import PersonalAccount
 
+@app.task
 def save_value(cv, an):
     time_now = datetime.datetime.now()
     return IndicationController.post(current_value=cv, time_of_taking=time_now, account_number=an)
 
+@app.task
 def update_code_validity(an):
     personal_account = PersonalAccount.objects.get(account_number=an)
     time_now = datetime.datetime.now()
