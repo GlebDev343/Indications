@@ -7,3 +7,5 @@ ipython
 celery
 celery[redis]
 celery[yaml]
+flake8
+black
