@@ -5,7 +5,7 @@ djangorestframework
 django-extensions
 ipython
 celery
-celery[redis]
-celery[yaml]
 flake8
 black
+pytest-django
+redis

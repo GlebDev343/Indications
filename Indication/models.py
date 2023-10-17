@@ -2,15 +2,14 @@ import datetime
 from datetime import timedelta
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
 
 def min_phone_value(value):
     if value < 10000000:
-        raise ValidationError(_("%(value)s is less than required."))
+        raise ValidationError(f"{value} is less than required.")
 
 def max_current_value(value):
-    if value > 10000000:
-        raise ValidationError(_("%(value)s is greater than required."))
+    if value > 999999:
+        raise ValidationError(f"{value} is greater than required.")
 
 class Manufacturer(models.Model):
     name = models.CharField(unique=True)
@@ -41,7 +40,7 @@ class PersonalAccount(models.Model):
     email = models.CharField(null=True, blank=True)
     phone_number = models.IntegerField(null=True, validators=[min_phone_value])
     verification_code = models.CharField()
-    code_validity = models.DateTimeField(default=datetime.datetime.now() + datetime.timedelta(days=-9999))
+    code_validity = models.DateTimeField(default="1900-01-01 00:00:00")
 
 class InstalledMeteringDevice(models.Model):
     personal_account = models.ForeignKey(PersonalAccount, on_delete=models.CASCADE)
