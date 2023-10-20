@@ -3,11 +3,13 @@ from datetime import timedelta
 from django.db import models
 from django.core.exceptions import ValidationError
 
-def min_phone_value(value):
+def phone_value_validator(value):
     if value < 10000000:
         raise ValidationError(f"{value} is less than required.")
+    elif value >= 10000000000: 
+        raise ValidationError(f"{value} is greater than required.")
 
-def max_current_value(value):
+def max_current_value_validator(value):
     if value > 999999:
         raise ValidationError(f"{value} is greater than required.")
 
@@ -38,7 +40,7 @@ class PersonalAccount(models.Model):
     patronymic = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.CharField(null=True, blank=True)
-    phone_number = models.IntegerField(null=True, validators=[min_phone_value])
+    phone_number = models.IntegerField(null=True, validators=[phone_value_validator])
     verification_code = models.CharField()
     code_validity = models.DateTimeField(default="1900-01-01 00:00:00")
 
@@ -52,9 +54,9 @@ class InstalledMeteringDevice(models.Model):
         unique_together = ["personal_account","metering_device","installation_date"]
 
 class Indication(models.Model):
-    current_value = models.IntegerField(validators=[max_current_value])
+    current_value = models.IntegerField(validators=[max_current_value_validator])
     time_of_taking = models.DateTimeField()
-    metering_device = models.ForeignKey(InstalledMeteringDevice, on_delete=models.CASCADE)
+    installed_metering_device = models.ForeignKey(InstalledMeteringDevice, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ["metering_device", "current_value", "time_of_taking"]
+        unique_together = ["installed_metering_device", "current_value", "time_of_taking"]

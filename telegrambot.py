@@ -1,6 +1,5 @@
 import os
 import datetime
-import time
 import telebot
 import Indication
 
@@ -48,7 +47,6 @@ def check_pesonal_account(message):
             message.chat.id,
             "A confirmation code has been sent to your email, please enter the message in the format (indication code)",
         )
-        time.sleep(8)
         print(personal_account.verification_code)
     except PersonalAccount.DoesNotExist:
         bot.send_message(
