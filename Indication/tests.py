@@ -36,7 +36,7 @@ def test_correct_max_value_validation():
     indication = Indication(
         current_value=123456,
         time_of_taking="2003-03-03 00:00:00",
-        installed_metering_device=installed_metering_device,
+        metering_device=installed_metering_device,
     )
     assert max_current_value_validator(indication.current_value) == None
 
@@ -66,7 +66,7 @@ def test_uncorrect_max_value_validation():
     indication = Indication(
         current_value=1234567,
         time_of_taking="2003-03-03 00:00:00",
-        installed_metering_device=installed_metering_device,
+        metering_device=installed_metering_device,
     )
 
     with pytest.raises(ValidationError):

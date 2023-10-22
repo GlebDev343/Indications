@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='indication',
             name='current_value',
-            field=models.IntegerField(validators=[Indication.models.max_current_value]),
+            field=models.IntegerField(validators=[Indication.models.max_current_value_validator]),
         ),
         migrations.AlterField(
             model_name='meteringdevice',
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='personalaccount',
             name='phone_number',
-            field=models.IntegerField(null=True, validators=[Indication.models.min_phone_value]),
+            field=models.IntegerField(null=True, validators=[Indication.models.phone_value_validator]),
         ),
         migrations.AlterUniqueTogether(
             name='indication',

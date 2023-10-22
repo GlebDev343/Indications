@@ -56,7 +56,7 @@ class InstalledMeteringDevice(models.Model):
 class Indication(models.Model):
     current_value = models.IntegerField(validators=[max_current_value_validator])
     time_of_taking = models.DateTimeField()
-    installed_metering_device = models.ForeignKey(InstalledMeteringDevice, on_delete=models.CASCADE)
+    metering_device = models.ForeignKey(InstalledMeteringDevice, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ["installed_metering_device", "current_value", "time_of_taking"]
+        unique_together = ["metering_device", "current_value", "time_of_taking"]
